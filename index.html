@@ -90,6 +90,10 @@ function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
+// Global rank = position in the full rating-sorted list, independent of
+// any active filter (searching a player must show their real ranking).
+PLAYERS.forEach((p, i) => { p.rank = i + 1; });
+
 function render() {
     const q = document.getElementById('search').value.trim().toLowerCase();
     const cont = document.getElementById('continent-filter').value;
@@ -127,7 +131,7 @@ function render() {
                 dcell = `<span style="${cls}">${p.d > 0 ? '+' : ''}${p.d}</span>`;
             }
         }
-        rows.push(`<tr><td class="rank">${visible}</td><td>${escapeHtml(p.fn)} ${escapeHtml(p.sn)}${prov}</td><td>${escapeHtml(p.c)}</td><td class="rating">${p.r}</td><td class="rating">${dcell}</td><td class="games">${p.g}</td><td>${badges}</td></tr>`);
+        rows.push(`<tr><td class="rank">${p.rank}</td><td>${escapeHtml(p.fn)} ${escapeHtml(p.sn)}${prov}</td><td>${escapeHtml(p.c)}</td><td class="rating">${p.r}</td><td class="rating">${dcell}</td><td class="games">${p.g}</td><td>${badges}</td></tr>`);
     });
     document.getElementById('rt-body').innerHTML = rows.join('');
     document.getElementById('visible-count').textContent = `${visible} of ${PLAYERS.length} players`;
