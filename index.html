@@ -106,12 +106,15 @@ function render() {
         visible++;
         const prov = p.pr ? '<span class="prov">prov</span>' : '';
         const badges = (p.ts || []).map(t => `<span class="t-badge">${escapeHtml(t)}</span>`).join('');
-        // Diff vs previous snapshot: established players only (provisional
-        // K=40 swings are bootstrap noise, not form).
+        // Diff in rating points vs previous snapshot. Shown for everyone;
+        // provisional players' deltas are muted (K=40 bootstrap swings).
         let dcell = '';
-        if (!p.pr && p.d !== null && p.d !== undefined && p.d !== 0) {
-            const cls = p.d > 0 ? 'color:#2f855a' : 'color:#c53030';
+        if (p.d !== null && p.d !== undefined && p.d !== 0) {
+            let cls = p.d > 0 ? 'color:#2f855a' : 'color:#c53030';
+            if (p.pr) cls += ';opacity:0.45;font-weight:400';
             dcell = `<span style="${cls}">${p.d > 0 ? '+' : ''}${p.d}</span>`;
+        } else if (p.d === null || p.d === undefined) {
+            dcell = '<span style="color:#a0aec0">new</span>';
         }
         rows.push(`<tr><td class="rank">${visible}</td><td>${escapeHtml(p.fn)} ${escapeHtml(p.sn)}${prov}</td><td>${escapeHtml(p.c)}</td><td class="rating">${p.r}</td><td class="rating">${dcell}</td><td class="games">${p.g}</td><td>${badges}</td></tr>`);
     });
