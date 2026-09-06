@@ -109,8 +109,7 @@ function render() {
         // Tournament count; full names on hover (newest first)
         const tsList = (p.ts || []).slice().reverse();
         const badges = tsList.length
-            ? `<span class="t-count" title="${escapeHtml(tsList.join('
-'))}">${tsList.length}</span>`
+            ? `<span class="t-count" title="${escapeHtml(tsList.join(String.fromCharCode(10)))}">${tsList.length}</span>`
             : '';
         // Diff in rating points vs previous snapshot. Shown for everyone;
         // provisional players' deltas are muted (K=40 bootstrap swings).
