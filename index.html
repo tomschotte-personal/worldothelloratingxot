@@ -31,9 +31,9 @@ tbody tr:hover { background: #f7fafc; }
 .rating { font-weight: 700; color: #2b6cb0; }
 .prov { display: inline-block; padding: 1px 5px; margin-left: 6px; font-size: 10px;
         background: #cbd5e0; color: #2d3748; border-radius: 3px; }
-.t-badge { display: inline-block; padding: 1px 6px; margin: 1px 2px 1px 0;
-           background: #2b6cb0; color: white; border-radius: 4px;
-           font-size: 10px; font-weight: 700; letter-spacing: 0.02em; }
+.t-count { display: inline-block; min-width: 26px; text-align: center;
+           padding: 1px 7px; background: #2b6cb0; color: white; border-radius: 10px;
+           font-size: 11px; font-weight: 700; cursor: help; }
 .visible-count { color: #718096; font-size: 13px; }
 .t-list { margin-top: 18px; padding: 14px 16px; background: white;
           border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; }
@@ -68,7 +68,7 @@ tbody tr:hover { background: #f7fafc; }
 </div>
 
 <table id="rt">
-  <thead><tr><th class="rank">#</th><th>Player</th><th>Country</th><th class="rating">Rating</th><th class="rating">&Delta;</th><th class="games">Games</th><th>Tournaments</th></tr></thead>
+  <thead><tr><th class="rank">#</th><th>Player</th><th>Country</th><th class="rating">Rating</th><th class="rating">&Delta;</th><th class="games">Games</th><th title="hover a count for the tournament names">Tourn.</th></tr></thead>
   <tbody id="rt-body"></tbody>
 </table>
 
@@ -106,7 +106,12 @@ function render() {
         if (hideProv && p.pr) return;
         visible++;
         const prov = p.pr ? '<span class="prov">prov</span>' : '';
-        const badges = (p.ts || []).map(t => `<span class="t-badge">${escapeHtml(t)}</span>`).join('');
+        // Tournament count; full names on hover (newest first)
+        const tsList = (p.ts || []).slice().reverse();
+        const badges = tsList.length
+            ? `<span class="t-count" title="${escapeHtml(tsList.join('
+'))}">${tsList.length}</span>`
+            : '';
         // Diff in rating points vs previous snapshot. Shown for everyone;
         // provisional players' deltas are muted (K=40 bootstrap swings).
         // Diff = rating change from the LATEST event, so only its
